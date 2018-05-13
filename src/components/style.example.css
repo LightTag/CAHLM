@@ -1,0 +1,23 @@
+.example{
+    font-size: 2em;
+    border: 2px ;
+    border-color: chartreuse;
+    border-width: 2px;
+    border-style: dotted;
+    margin-bottom: 1em;
+
+}
+
+.classification-button-row{
+    border-color: chartreuse;
+    border-width: 2px;
+    border-style: dotted;
+    
+}
+
+.mlt-button{
+    border-color: chartreuse;
+    border-width: 2px;
+    border-style: dotted;
+    
+}
