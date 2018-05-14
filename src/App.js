@@ -10,7 +10,14 @@ class App extends Component {
   render() {
     return (
         <Grid>
-        <ESManager schema={schema} labeler="tal2" />
+        <ESManager 
+        schema={schema}
+        type="test"
+        index="test"
+        max_labelers={3}
+        host='http://localhost:9200'
+        text_field='text' 
+        labeler="tal2" />
         </Grid>
     );
   }

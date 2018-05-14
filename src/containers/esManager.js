@@ -14,9 +14,8 @@ export class ESManager extends React.Component {
             nullWords:[]
         };
         this.client = new elasticsearch.Client({
-            host: 'http://localhost:9200',
+            host: this.props.host,
           });
-        this.index = 'test'; this.type='test'
 
 
     }
@@ -30,8 +29,8 @@ export class ESManager extends React.Component {
     query(qs){
 
         this.client.search({
-            index:this.index,
-            type:this.type,
+            index:this.props.index,
+            type:this.props.type,
             body: {
                 query: {
                     bool: {
@@ -61,7 +60,7 @@ export class ESManager extends React.Component {
                             must:{
                                 range: { 
                                     counter:{
-                                        "lt":3 //No more than 3 votes
+                                        "lt":this.props.max_labelers //No more than 3 votes
                                     }
                                 }
                             },
@@ -76,33 +75,35 @@ export class ESManager extends React.Component {
         
         if (this.state.nullWords.length >0){
             debugger;
-            filter['bool']['must_not'] = filter['bool']['must_not'].concat(this.state.nullWords.map(nt=>({
-                            term: {text:nt}
-                    })))
+            filter['bool']['must_not'] = filter['bool']['must_not'].concat(this.state.nullWords.map(nt=>{
+                let term_query ={
+                            term: {}
+                    }
+                term_query['term'][this.props.text_field] =nt;
+                return term_query
 
-            }
-        
+                }))
+            }        
         return filter
     }
+
     moreLikeThis(example){
         this.client.search({
-            index:this.index,
-            type:this.type,
+            index:this.props.index,
+            type:this.props.type,
             body: {
                 query: {
-                    size:100,
                     bool:{
 
                         must:{
                             more_like_this: {
                                 like:{
-                                    _index:this.index,
-                                    _type:this.type,
+                                    _index:this.props.index,
+                                    _type:this.props.type,
                                     _id:example._id
                                                     
     
                                 },
-                                filter_duplicate_text: true
 
     
                              }
@@ -123,13 +124,16 @@ export class ESManager extends React.Component {
     moreLikeClass(terms){
         //Pass terms from significant terms to get more stuff
         this.client.search({
-            index:this.index,
-            type:this.type,
+            index:this.props.index,
+            type:this.props.type,
             body: {
                 query: {
                     bool:{
-                    should: terms.map(x=>(
-                        { term: {text:x.key} })),
+                    should: terms.map(x=>{
+                        let term_query= {term:{}}
+                        term_query['term'][this.props.text_field] =x.key
+                        return term_query;     
+                    }),
                     filter:this.makeQueryFilter()
                     }
                 }
@@ -143,8 +147,8 @@ export class ESManager extends React.Component {
     submitClassification(classname,example){
         debugger;
         this.client.update({
-            index:this.index,
-            type:this.type,
+            index:this.props.index,
+            type:this.props.type,
             id:example._id, // The id of the current example
             body: {
                 
@@ -152,12 +156,14 @@ export class ESManager extends React.Component {
                     source:`if( ctx._source.containsKey(\"counter\") ){ 
                                 ctx._source.counter += 1; 
                                 ctx._source.classifications.add(params.classname) ; 
-                                ctx._source.labelers.add(params.labeler)
+                                ctx._source.labelers.add(params.labeler);
                                 
                                 } 
                                 else { 
                                     ctx._source.counter = 1; 
-                                    ctx._source.classifications =[params.classname]
+                                    ctx._source.classifications =[params.classname];
+                                    ctx._source.labelers =[params.labeler];
+                                    
                                 }`,
 
                     params: {
@@ -213,8 +219,8 @@ export class ESManager extends React.Component {
             <Col md={3} >
                 <SignficantTermsMananager 
                     client={this.client}
-                    index={this.index}
-                    type={this.type}
+                    index={this.props.index}
+                    type={this.props.type}
                     schema={this.props.schema}
                     addNullWord={this.addNullWord.bind(this)}
                     moreLikeClass={this.moreLikeClass.bind(this)}
