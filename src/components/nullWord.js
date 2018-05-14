@@ -1,6 +1,7 @@
 import React from 'react'
-import {Label, Button,Col } from 'react-bootstrap'
+import {Label, Button,Col,Row } from 'react-bootstrap'
 import {FormControl,FormGroup,HelpBlock,ControlLabel} from 'react-bootstrap'
+import './style.nullword.css'
 class WordInputForm extends React.Component {
     constructor(props, context) {
       super(props, context);
@@ -46,25 +47,24 @@ class WordInputForm extends React.Component {
     }
   }
 const NullWord = (props)=>(
-    <h3> <Label bsSize="large" bsStyle="danger">  
+  <span className="null-word">
     {props.word} 
     <Button bsSize="xsmall" onClick={()=>props.removeWord(props.word)}> X </Button>
-    </Label>
-    </h3>
+    </span>
 )
 
 
 export const NullWordBar = (props)=>{
     return (
-    <div>
-        <Col md={2}>
+    <Row >
+        {/* <Col md={2}>
             <WordInputForm onSubmit={props.addWord} />
-        </Col>
-        {props.words.map(word=>(
-            <Col md={1}>
-                <NullWord word={word} removeWord={props.removeWord} />
-            </Col>
-        ))}
-    </div>
+        </Col> */}
+        <div className='null-word-bar'>
+          {props.words.map(word=>(
+                  <NullWord word={word} removeWord={props.removeWord} />
+          ))}
+        </div>
+    </Row>
 )
 }

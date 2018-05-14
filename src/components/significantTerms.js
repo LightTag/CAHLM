@@ -12,41 +12,22 @@ export class SignficantTermsMananager extends React.Component{
         this.state = {terms:[]}
     }
 
-    getSignificantTermsForClass(){
-        this.props.client.search({
-            index:this.props.index,
-            type:this.props.type,
-            body: {
-                query:{
-                    term:{ "classifications.keyword":this.state.tagname}
-                },
-                aggregations : {
-                    significant_words : {
-                        
-                        significant_text : { 
-                            "field" : "text",
-                            size:100,
-                    }
-                }
     
-            },
-        }
-    })
-    .then(resp=>{
-        this.setState({terms:resp.aggregations.significant_words.buckets})
-    })
-    .catch(err=>console.log(err))
-
-    }
 
     selectTag(tagname){
-        this.setState({tagname},this.getSignificantTermsForClass)
+        this.setState({tagname},(x=>{this.props.getSignificantTermsForClass(tagname)}))
     
     }
 
     moreLikeClass(){
 
-        this.props.moreLikeClass(this.state.terms)
+        this.props.moreLikeClass(this.props.terms)
+    }
+
+    componentWillUpdate(){
+        if (!this.state.updating){
+            
+        }
     }
 
 
@@ -54,6 +35,7 @@ export class SignficantTermsMananager extends React.Component{
     render(){
         return (
         <Row>
+            <div className="sigterm-body">
             <Row>
             {this.props.schema.map(tag=>(
                     <SigTermTagButton 
@@ -64,27 +46,32 @@ export class SignficantTermsMananager extends React.Component{
             ))}
             </Row>
             <Row>
-                <Button onClick={this.moreLikeClass.bind(this)} > MORE </Button>
-            </Row>
-            <Row>
-                <Col md={4}>
-                <ListGroup >
-                    {this.state.terms.map(x=>(
-                        <ListGroupItem > 
-                            <span>
-                            <Button 
-                            bsStyle="danger" 
-                            bsSize="xsmall"
-                            onClick={()=>{this.props.addNullWord(x.key)}}
-                             > X </Button> 
-                            <Button bsStyle="success" bsSize="xsmall"> V </Button>  
-                                    {x.key}
-                                  </span>   
-                                 </ListGroupItem>
-                    ))}
-                    </ListGroup>
+                <Col mdOffset={3}>
+                   {this.state.tagname ? <Button bsStyle="success" onClick={this.moreLikeClass.bind(this)} > MORE {this.state.tagname} examples </Button>
+                    :null }
                 </Col>
             </Row>
+            <Row>
+                <Col mdOffset={3}>
+                {this.props.terms && this.props.terms.length>0 ? 
+                    <h2>Feature Words for class {this.state.tagname} </h2>
+                    : <h3> Not enough examples for class {this.state.tagname} </h3>}
+                </Col>
+                    {this.props.terms.map(x=>(
+                        <Col md={4}>
+                            <span className="sigterm-container">
+                                <Button 
+                                bsStyle="danger" 
+                                bsSize="xsmall"
+                                onClick={()=>{this.props.addNullWord(x.key)}}
+                                > X </Button> 
+                                {/* <Button bsStyle="success" bsSize="xsmall"> V </Button>   */}
+                                        {x.key}
+                            </span> 
+                            </Col>  
+                    ))}
+            </Row>
+        </div>
         </Row>
         )
     }

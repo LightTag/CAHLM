@@ -11,7 +11,8 @@ export class ESManager extends React.Component {
         super(props);
         this.state = {
             hits:[],
-            nullWords:[]
+            nullWords:[],
+            terms:[]
         };
         this.client = new elasticsearch.Client({
             host: this.props.host,
@@ -201,6 +202,38 @@ export class ESManager extends React.Component {
         
     }
 
+    getSignificantTermsForClass(tagname){
+        this.setState({updating:true})
+        this.client.search({
+            index:this.props.index,
+            type:this.props.type,
+            body: {
+                query:{
+                    term:{ "classifications.keyword":tagname}
+                },
+                aggregations : {
+                    significant_words : {
+                        
+                        significant_text : { 
+                            "field" : this.props.text_field,
+                            size:100,
+                    }
+                }
+    
+            },
+        }
+    })
+    .then(resp=>{
+
+        this.setState({
+            terms:resp.aggregations.significant_words.buckets,
+            updating:false            
+        })
+    })
+    .catch(err=>console.log(err))
+        this.setState({updating:false})
+    }
+
     render(){
         return(
             <React.Fragment>
@@ -216,7 +249,7 @@ export class ESManager extends React.Component {
              />
         </Row>
         <Row>
-            <Col md={3} >
+            <Col md={4} >
                 <SignficantTermsMananager 
                     client={this.client}
                     index={this.props.index}
@@ -224,10 +257,12 @@ export class ESManager extends React.Component {
                     schema={this.props.schema}
                     addNullWord={this.addNullWord.bind(this)}
                     moreLikeClass={this.moreLikeClass.bind(this)}
+                    getSignificantTermsForClass={this.getSignificantTermsForClass.bind(this)}
+                    terms={this.state.terms}
                     />
             </Col>
                 
-            <Col md={7}>
+            <Col mdOffset={1} md={7}>
                 <Row>
                         <Examples 
                             hits={this.state.hits}

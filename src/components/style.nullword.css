@@ -1,0 +1,19 @@
+.null-word-bar{
+    background: rgba(250, 0, 0, 0.2);
+    border-color: rgba(255, 0, 45,0.6);
+    padding: 0.25em 0.35em;
+    margin: 0px 0.25em;
+    line-height: 1;
+    border-radius: 0.25em;
+    border: 1px solid;
+}
+
+.null-word{
+    background: rgba(250, 0, 0, 0.7);
+    border-color: rgba(255, 0, 45,0.9);
+    border: 1px solid;
+    margin: 0px 0.25em;
+    color: white;
+    
+    
+}

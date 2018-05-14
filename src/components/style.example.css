@@ -1,22 +1,23 @@
 .example{
     font-size: 2em;
-    border: 2px ;
-    border-color: chartreuse;
-    border-width: 2px;
-    border-style: dotted;
-    margin-bottom: 1em;
+    border-color: rgb(166, 226, 45);
+    padding: 0.25em 0.35em;
+    margin: 0px 0.25em;
+    line-height: 1;
+    border-radius: 0.25em;
+    border: 1px solid;
 
 }
 
 .classification-button-row{
-    border-color: chartreuse;
+    border-color: rgba(166, 226, 45,0.25);
     border-width: 2px;
     border-style: dotted;
     
 }
 
 .mlt-button{
-    border-color: chartreuse;
+    border-color: rgba(166, 226, 45,0.25);
     border-width: 2px;
     border-style: dotted;
     
