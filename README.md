@@ -21,5 +21,7 @@ CAHLeM is a set of React components that query ElasticSearch. The queries and co
 2. Find new features and anchors by leveraging "Machine Learning" 
 
 ## Project Structure
+
 *client* holds the React client.
+
 *es-docker* has Docker files and configs to run a local demo
