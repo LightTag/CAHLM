@@ -1,6 +1,6 @@
 # CAHLeM
 CAHLeM (pronounced Kay-Lem) is an open source tool to quickly classify text. 
-![alt text]('./assets/img/demo.gif')
+![alt text]('/assets/img/demo.gif')
 
 ## Motivation
 CAHLeM sets out to solve the problem of "What to label" when labeling an NLP dataset. It's premise is that the 
