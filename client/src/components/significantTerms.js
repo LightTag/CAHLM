@@ -1,73 +1,118 @@
 import React from 'react'
-import {Row,Button,Col,Label,ListGroup,ListGroupItem} from 'react-bootstrap'
+import {
+  Row,
+  Button,
+  Col,
+  Label,
+  ListGroup,
+  ListGroupItem
+} from 'react-bootstrap'
 import './style.sigterm.css'
-const SigTermTagButton = (props)=>(
-    <Button onClick={()=>{props.selectTag(props.tagname)}}> {props.tagname} </Button>
+import {ClassifcationButtonsRow} from './classificationButton';
+const SigTermTagButton = (props) => (
+  <Button onClick={() => {
+    props.selectTag(props.tagname)
+  }}>
+    {props.tagname}
+  </Button>
 
 )
 
-export class SignficantTermsMananager extends React.Component{
-    constructor(props){
-        super(props)
-        this.state = {terms:[]}
+const StatusMessage = (props) => {
+  let text;
+  if (!props.tagname) {
+    text = "Click on a tag to see its top features"
+  } else {
+    if (props.terms.length > 0) {
+      text = `Feature Words for class ${props.tagname}`
+    } else {
+      text = `Not enough examples to get features for  ${props.tagname}`
     }
 
-    
+  }
 
-    selectTag(tagname){
-        this.setState({tagname},(x=>{this.props.getSignificantTermsForClass(tagname)}))
-    
-    }
+  return (
+    <div className="sigterms-status">
+      <h3>
+        {text}
+      </h3>
+    </div>
+  )
+}
 
-    moreLikeClass(){
+export class SignficantTermsMananager extends React.Component {
+  /*
+    The UI component for the signfiicant terms funcionality.
+    The ES client is passed as a prop from the EsManager.
+    ESManager stores the signifcant terms
+    */
+  constructor(props) {
+    super(props)
+    this.state = {}
+  }
 
-        this.props.moreLikeClass(this.props.terms)
-    }
+  selectTag(tagname) {
+    this.setState({
+      tagname
+    }, (x => {
+      this
+        .props
+        .getSignificantTermsForClass(tagname)
+    }))
 
-    componentWillUpdate(){
-        if (!this.state.updating){
-            
-        }
-    }
+  }
 
+  moreLikeClass() {
 
+    this
+      .props
+      .moreLikeClass(this.props.terms)
+  }
 
-    render(){
-        return (
-        <div className="sigterm-body">
-            
-                <Col mdOffset={1} md={11}>
-                {this.props.schema.map(tag=>(
-                        <SigTermTagButton 
-                        tagname={tag.name}
-                        selectTag={this.selectTag.bind(this)}
-                        
-                        />
-                ))}
-            </Col>
-            <Row>
-                <Col mdOffset={3}>
-                   {this.state.tagname ? <Button bsStyle="success" onClick={this.moreLikeClass.bind(this)} > MORE {this.state.tagname} examples </Button>
-                    :null }
-                </Col>
-            </Row>
-            <Row>
-                <Col mdOffset={1}>
-                <div className="sigterms-status">
-                {this.props.terms && this.props.terms.length>0 ? 
-                    <i>Feature Words for class {this.state.tagname} </i>
-                    : <h3> Not enough examples for class {this.state.tagname} </h3>}
-                </div>
-                </Col>
-                    {this.props.terms.map(x=>(
-                        <Col md={4}>
-                            <span className="sigterm-container" onClick={()=>{this.props.addNullWord(x.key)}}>
-                                        {x.key}
-                            </span> 
-                            </Col>  
-                    ))}
-            </Row>
-        </div>
-        )
-    }
+  componentWillUpdate() {
+    if (!this.state.updating) {}
+  }
+
+  render() {
+    return (
+      <div className="sigterm-body">
+
+        <Col mdOffset={1} md={11}>
+          <ClassifcationButtonsRow
+            schema={this.props.schema}
+            submitClassification={this.selectTag.bind(this)}/>
+        </Col>
+        <Row>
+          <Col mdOffset={3}>
+            {this.state.tagname
+              ? <Button
+                  bsStyle="success"
+                  onClick={this.moreLikeClass.bind(this)}
+                >
+                      MORE {this.state.tagname} examples
+                </Button>
+              : null}
+          </Col>
+        </Row>
+        <Row>
+          <Col mdOffset={1}>
+            <StatusMessage terms={this.props.terms} tagname={this.state.tagname}/>
+          </Col>
+          {this.props.terms.map(x => (
+              <Col md={4}>
+                <span
+                  className="sigterm"
+                  onClick={() => {
+                  this
+                    .props
+                    .addNullWord(x.key)
+                }}>
+                  {x.key}
+                </span>
+              </Col>
+            ))}
+        </Row>
+      </div>
+    )
+  }
 }
