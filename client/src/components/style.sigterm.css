@@ -2,15 +2,23 @@
     background: rgba(166, 226, 45, 0.2);
     border-color: rgb(166, 226, 45);
     padding: 0.25em 0.35em;
-    margin: 0px 0.25em;
-    line-height: 1;
+    margin: 2em 0.25em;
+    line-height: 3;
     border-radius: 0.25em;
     border: 1px solid;
+    cursor: pointer;
+    margin-top:5em; 
 }
 
 .sigterm-body{
     background: rgba(166, 226, 45, 0.1);
     border-radius: 0.25em;
     border: 1px solid;
+    height: 40%;
+    width: 100%;
+
     
+}
+.sigterms-status {
+    word-wrap: normal
 }

@@ -34,17 +34,17 @@ export class SignficantTermsMananager extends React.Component{
 
     render(){
         return (
-        <Row>
-            <div className="sigterm-body">
-            <Row>
-            {this.props.schema.map(tag=>(
-                    <SigTermTagButton 
-                    tagname={tag.name}
-                    selectTag={this.selectTag.bind(this)}
-                    
-                     />
-            ))}
-            </Row>
+        <div className="sigterm-body">
+            
+                <Col mdOffset={1} md={11}>
+                {this.props.schema.map(tag=>(
+                        <SigTermTagButton 
+                        tagname={tag.name}
+                        selectTag={this.selectTag.bind(this)}
+                        
+                        />
+                ))}
+            </Col>
             <Row>
                 <Col mdOffset={3}>
                    {this.state.tagname ? <Button bsStyle="success" onClick={this.moreLikeClass.bind(this)} > MORE {this.state.tagname} examples </Button>
@@ -52,27 +52,22 @@ export class SignficantTermsMananager extends React.Component{
                 </Col>
             </Row>
             <Row>
-                <Col mdOffset={3}>
+                <Col mdOffset={1}>
+                <div className="sigterms-status">
                 {this.props.terms && this.props.terms.length>0 ? 
-                    <h2>Feature Words for class {this.state.tagname} </h2>
+                    <i>Feature Words for class {this.state.tagname} </i>
                     : <h3> Not enough examples for class {this.state.tagname} </h3>}
+                </div>
                 </Col>
                     {this.props.terms.map(x=>(
                         <Col md={4}>
-                            <span className="sigterm-container">
-                                <Button 
-                                bsStyle="danger" 
-                                bsSize="xsmall"
-                                onClick={()=>{this.props.addNullWord(x.key)}}
-                                > X </Button> 
-                                {/* <Button bsStyle="success" bsSize="xsmall"> V </Button>   */}
+                            <span className="sigterm-container" onClick={()=>{this.props.addNullWord(x.key)}}>
                                         {x.key}
                             </span> 
                             </Col>  
                     ))}
             </Row>
         </div>
-        </Row>
         )
     }
 }

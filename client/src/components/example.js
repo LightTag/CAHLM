@@ -28,19 +28,26 @@ export const Example =(props)=>(
     </div>
 )
 
-export const Examples =  (props)=>(
+export const Examples =  (props)=>{
+    const example = props.hits[0]
+    if (!example){
+        return null;
+    }
+    return(
+    
     <div className="examples">
-        {props.hits.map(x=>(
+        {/* {props.hits.map(x=>( */}
             <Row>
                 <Example
-                    example={x}
+                    example={example}
                     schema={props.schema}
                     submitClassification={props.submitClassification}
                     moreLikeThis={props.moreLikeThis}
                 />
             </Row>
-        )
-        )}
+        
+        {/* )} */}
         
     </div>
 )
+}

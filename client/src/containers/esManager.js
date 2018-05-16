@@ -6,6 +6,7 @@ import { Example, Examples } from '../components/example';
 import { ClassificationButton, MLTButton } from '../components/classificationButton';
 import { SignficantTermsMananager } from '../components/significantTerms';
 import { NullWordBar } from '../components/nullWord';
+import { LabelerName } from '../components/labelerName';
 export class ESManager extends React.Component {
     constructor(props){
         super(props);
@@ -20,6 +21,9 @@ export class ESManager extends React.Component {
 
 
     }
+    componentDidMount(){
+        this.query("*")
+    }
     handleQueryResponse(resp,mlt){
         let hits = [];
         hits = resp.hits.hits
@@ -27,6 +31,10 @@ export class ESManager extends React.Component {
             hits
         })
     }
+    setLabeler(name){
+        this.setState({labeler:name})
+    }
+
     query(qs){
 
         this.client.search({
@@ -58,15 +66,22 @@ export class ESManager extends React.Component {
     makeQueryFilter(){
         let filter = {bool:
                         {
-                            must:{
-                                range: { 
+                            should:[
+                                {range: { 
                                     counter:{
                                         "lt":this.props.max_labelers //No more than 3 votes
                                     }
+
                                 }
-                            },
+                                },
+                                {bool:
+                                    {must_not:
+                                        {exists: {field:"counter"}}
+                                    }
+                                }
+                            ],
                             must_not:[
-                                {"term": {"labelers.keyword":this.props.labeler}}
+                                {"term": {"labelers.keyword":this.state.labeler}}
                             ]
                         },
                         
@@ -169,7 +184,7 @@ export class ESManager extends React.Component {
 
                     params: {
                         "classname":classname,
-                        "labeler":this.props.labeler
+                        "labeler":this.state.labeler
                     },
     
             }
@@ -216,7 +231,9 @@ export class ESManager extends React.Component {
                         
                         significant_text : { 
                             "field" : this.props.text_field,
-                            size:100,
+                            size:10,
+                            "min_doc_count": 3
+
                     }
                 }
     
@@ -237,16 +254,22 @@ export class ESManager extends React.Component {
     render(){
         return(
             <React.Fragment>
+                <LabelerName
+                setName={this.setLabeler.bind(this)}
+                
+                />
         <Row>
             <SearchInput onSubmit={this.query.bind(this)}/>
             <Row>
                     {this.state.hits.length} examples in queue
             </Row>
+            <Row>
             <NullWordBar
              words={this.state.nullWords}
              removeWord={this.removeNullWord.bind(this)}
              addWord={this.addNullWord.bind(this)}
              />
+             </Row>
         </Row>
         <Row>
             <Col md={4} >
@@ -262,7 +285,7 @@ export class ESManager extends React.Component {
                     />
             </Col>
                 
-            <Col mdOffset={1} md={7}>
+            <Col mdOffset={1} md={6}>
                 <Row>
                         <Examples 
                             hits={this.state.hits}

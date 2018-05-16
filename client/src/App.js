@@ -4,7 +4,7 @@ import './App.css';
 import { ESManager } from './containers/esManager';
 import {Grid} from 'react-bootstrap'
 const schema = [
-  {name:"positive"},{name:"negative"},{name:"neutral"},{name:"brag"},{name:"unk"}
+  {name:"Insult"},{name:"Praise"},{name:"Other"},{name:"Unk"},{name:"Issue"}
 ]
 class App extends Component {
   render() {
@@ -15,9 +15,10 @@ class App extends Component {
         type="test"
         index="test"
         max_labelers={3}
+        //host='http://35.232.140.131:9200'
         host='http://localhost:9200'
         text_field='text' 
-        labeler="tal2" />
+         />
         </Grid>
     );
   }
