@@ -1,20 +1,16 @@
 .sigterm{
-    background: rgba(166, 226, 45, 0.2);
-    border-color: rgb(166, 226, 45);
     padding: 0.25em 0.35em;
-    margin: 2em 0.25em;
-    line-height: 3;
+    margin: 0.25em;
     border-radius: 0.25em;
     border: 1px solid;
     cursor: pointer;
-    margin-top:5em; 
+    font-size: 1.5em;
 }
 
 .sigterm-body{
-    background: rgba(166, 226, 45, 0.1);
-    border-radius: 0.25em;
     border: 1px solid;
-    height: 40%;
+    height: calc(95vh); 
+
     width: 100%;
 
     

@@ -5,7 +5,9 @@ import {
   Col,
   Label,
   ListGroup,
-  ListGroupItem
+  ListGroupItem,
+  Panel
+
 } from 'react-bootstrap'
 import './style.sigterm.css'
 import {ClassifcationButtonsRow} from './classificationButton';
@@ -75,16 +77,15 @@ export class SignficantTermsMananager extends React.Component {
 
   render() {
     return (
-      <div className="sigterm-body">
+      <Panel>
 
-        <Col mdOffset={1} md={11}>
-          <ClassifcationButtonsRow
+        <Panel.Heading>
+          <h2> Feature words </h2>
+          <StatusMessage terms={this.props.terms} tagname={this.state.tagname}/>
+        <ClassifcationButtonsRow
             schema={this.props.schema}
             submitClassification={this.selectTag.bind(this)}/>
-        </Col>
-        <Row>
-          <Col mdOffset={3}>
-            {this.state.tagname
+                        {this.state.tagname
               ? <Button
                   bsStyle="success"
                   onClick={this.moreLikeClass.bind(this)}
@@ -92,14 +93,17 @@ export class SignficantTermsMananager extends React.Component {
                       MORE {this.state.tagname} examples
                 </Button>
               : null}
+
+        
+        </Panel.Heading>
+        <Panel.Body>
+
+        <Row>
+          <Col mdOffset={3}>
           </Col>
         </Row>
         <Row>
-          <Col mdOffset={1}>
-            <StatusMessage terms={this.props.terms} tagname={this.state.tagname}/>
-          </Col>
           {this.props.terms.map(x => (
-              <Col md={4}>
                 <span
                   className="sigterm"
                   onClick={() => {
@@ -109,10 +113,10 @@ export class SignficantTermsMananager extends React.Component {
                 }}>
                   {x.key}
                 </span>
-              </Col>
             ))}
         </Row>
-      </div>
+        </Panel.Body>
+      </Panel>
     )
   }
 }

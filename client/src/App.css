@@ -1,5 +1,17 @@
+body {
+  font-size: 1em;
+
+}
+.btn{
+  font-size: 2em;
+  text-transform:uppercase;
+}
 .App {
   text-align: center;
+}
+.panel {
+  width: 100%;
+  color:black;
 }
 
 .App-logo {
@@ -9,9 +21,10 @@
 
 .App-header {
   background-color: #222;
-  height: 150px;
+  height: 5vh;
   padding: 20px;
   color: white;
+  margin-bottom: 3vh;
 }
 
 .App-title {

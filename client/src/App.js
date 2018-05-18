@@ -9,17 +9,24 @@ const schema = [
 class App extends Component {
   render() {
     return (
-        <Grid>
+      <React.Fragment>
+        <div className='App-header' >
+          CAHLeM
+        </div>
+
+        <Grid fluid>
+
         <ESManager 
         schema={schema}
-        type="test"
-        index="test"
+        type="email"
+        index="enron"
         max_labelers={3}
         //host='http://35.232.140.131:9200'
         host='http://localhost:9200'
         text_field='text' 
          />
         </Grid>
+        </React.Fragment>
     );
   }
 }

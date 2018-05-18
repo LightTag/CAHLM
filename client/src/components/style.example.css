@@ -1,24 +1,7 @@
-.example{
-    font-size: 2em;
-    border-color: rgb(166, 226, 45);
-    padding: 0.25em 0.35em;
-    margin: 0px 0.25em;
-    line-height: 1;
-    border-radius: 0.25em;
-    border: 1px solid;
+.example-text{
+    font-size: 3em;
+    line-height: 1.4em;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 
-}
 
-.classification-button-row{
-    border-color: rgba(166, 226, 45,0.25);
-    border-width: 2px;
-    border-style: dotted;
-    
-}
-
-.mlt-button{
-    border-color: rgba(166, 226, 45,0.25);
-    border-width: 2px;
-    border-style: dotted;
-    
 }

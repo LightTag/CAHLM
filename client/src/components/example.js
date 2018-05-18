@@ -1,31 +1,32 @@
 import React from 'react'
-import {Row,Col} from 'react-bootstrap'
+import {Row,Col,Panel} from 'react-bootstrap'
 import { MLTButton, ClassifcationButtonsRow } from './classificationButton';
 import  "./style.example.css"
 export const Example =(props)=>(
-    <div className="example">
-    <Row>
-        <Col md={6} mdOffset={1}>
-            <Row>
-            {props.example._source.text}
-            </Row>
-        </Col>
-        <Col md={2}>
-            <ClassifcationButtonsRow
-                example={props.example}
-                schema={props.schema}
-                submitClassification={props.submitClassification}
-            />
-        </Col>
-        <Col md={2}>
-            <MLTButton
-                handleSubmit={props.moreLikeThis}
-                example={props.example}
-            />
-        </Col>
-    </Row>
+    <Panel>
+        <Panel.Heading>
+            <h2> Classify the following example with these classes</h2>
+                <ClassifcationButtonsRow
+                    example={props.example}
+                    schema={props.schema}
+                    submitClassification={props.submitClassification}
+                />
+        </Panel.Heading>
+        <Panel.Body>
+            <div className="example-text">
+                {props.example._source.text}
+            </div>
+        </Panel.Body>
+        <Panel.Footer>
+            <h3> Click here to get similar examples </h3>
+                    <MLTButton
+                        handleSubmit={props.moreLikeThis}
+                        example={props.example}
+                    />
+        </Panel.Footer>
+
     
-    </div>
+    </Panel>
 )
 
 export const Examples =  (props)=>{
@@ -35,19 +36,13 @@ export const Examples =  (props)=>{
     }
     return(
     
-    <div className="examples">
-        {/* {props.hits.map(x=>( */}
-            <Row>
                 <Example
                     example={example}
                     schema={props.schema}
                     submitClassification={props.submitClassification}
                     moreLikeThis={props.moreLikeThis}
                 />
-            </Row>
         
-        {/* )} */}
         
-    </div>
-)
+    )
 }

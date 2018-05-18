@@ -7,13 +7,15 @@ import {ClassificationButton, MLTButton} from '../components/classificationButto
 import {SignficantTermsMananager} from '../components/significantTerms';
 import {NullWordBar} from '../components/nullWord';
 import {LabelerName} from '../components/labelerName';
+import './manager.css'
 export class ESManager extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       hits: [],
       nullWords: [],
-      terms: []
+      terms: [],
+      labeler:"tal"
     };
     this.client = new elasticsearch.Client({host: this.props.host});
 
@@ -274,9 +276,11 @@ export class ESManager extends React.Component {
 
               significant_text: {
                 "field": this.props.text_field, // Only check the text_field
-                size: 10, // Bring back 10 words
-                "min_doc_count": 3 // Magic number, ensure that a term appears in at least three docs. 
+                size: 20, // Bring back 10 words
+                "min_doc_count": 3, // Magic number, ensure that a term appears in at least three docs. 
                 // the min_doc is a nasty but effective way not to overfit on junk terms
+                "filter_duplicate_text": true
+
 
               }
             }
@@ -293,20 +297,61 @@ export class ESManager extends React.Component {
   }
 
   render() {
+      if (!this.state.labeler){
+        return(
+
+              <LabelerName setName={this
+    .setLabeler
+    .bind(this)}
+    labelerName={this.state.labeler}
+              
+    
+    />
+              )
+            }
+      
+      else{
+
+      
+          
+      
     return (
-      <React.Fragment>
-        <LabelerName setName={this
-          .setLabeler
-          .bind(this)}/>
-        <Row>
-          <SearchInput onSubmit={this
-            .query
-            .bind(this)}/>
+      <div className="manager-view">
+        <Col md={3}>
+          <SignficantTermsMananager
+                client={this.client}
+                index={this.props.index}
+                type={this.props.type}
+                schema={this.props.schema}
+                addNullWord={this.addNullWord.bind(this)}
+                moreLikeClass={this.moreLikeClass.bind(this)}
+                getSignificantTermsForClass={this.getSignificantTermsForClass.bind(this)}
+                terms={this.state.terms}
+              />
+
+        </Col>
+        <Col md={5} mdOffset={1}>
           <Row>
-            {this.state.hits.length}
-            examples in queue
+            <SearchInput onSubmit={this
+              .query
+              .bind(this)}/>
           </Row>
           <Row>
+              {this.state.hits.length}
+              examples in queue
+          </Row>
+          <Row>
+              <Examples
+                hits={this.state.hits}
+                schema={this.props.schema}
+                submitClassification={this.submitClassification.bind(this)}
+                moreLikeThis={this.moreLikeThis.bind(this)}/>
+          
+          </Row>
+        </Col>
+
+      <Col md={2} mdOffset={1}>
+        <Row>
             <NullWordBar
               words={this.state.nullWords}
               removeWord={this
@@ -315,34 +360,12 @@ export class ESManager extends React.Component {
               addWord={this
               .addNullWord
               .bind(this)}/>
-          </Row>
-        </Row>
-        <Row>
-          <Col md={4}>
-            <SignficantTermsMananager
-              client={this.client}
-              index={this.props.index}
-              type={this.props.type}
-              schema={this.props.schema}
-              addNullWord={this.addNullWord.bind(this)}
-              moreLikeClass={this.moreLikeClass.bind(this)}
-              getSignificantTermsForClass={this.getSignificantTermsForClass.bind(this)}
-              terms={this.state.terms}/>
-          </Col>
-
-          <Col mdOffset={1} md={6}>
-            <Row>
-              <Examples
-                hits={this.state.hits}
-                schema={this.props.schema}
-                submitClassification={this.submitClassification.bind(this)}
-                moreLikeThis={this.moreLikeThis.bind(this)}/>
-            </Row>
-          </Col>
         </Row>
 
-      </React.Fragment>
+    </Col>
+      </div>
     )
   }
+}
 
 }

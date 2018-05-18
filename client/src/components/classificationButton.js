@@ -1,26 +1,29 @@
 import React from 'react'
-import {Button} from 'react-bootstrap'
+import {Button,ButtonGroup} from 'react-bootstrap'
 
 export const ClassificationButton =(props)=>(
     <Button
         bsStyle={props.bsStyle}
-        onClick={()=>{props.handleSubmit(props.classname,props.example)}}
+        onClick={()=>{props.handleSubmit(props.tagName,props.example)}}
     > 
-        {props.classname} 
+        {props.tagName} 
     </Button>
 )
 
 export const ClassifcationButtonsRow =(props) =>(
     <div className="classification-button-row">
+    <ButtonGroup>
      {props.schema.map((tag,i)=>(
         <ClassificationButton
         key={i} 
-        classname={tag.name} 
+        tagName={tag.name} 
         handleSubmit={props.submitClassification}
         example={props.example}
         />
     ))}
+    </ButtonGroup>
     </div>
+
 
 
 )
