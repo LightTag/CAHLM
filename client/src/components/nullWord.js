@@ -2,6 +2,25 @@ import React from 'react'
 import {Label, Button,Col,Row, Panel } from 'react-bootstrap'
 import {FormControl,FormGroup,HelpBlock,ControlLabel} from 'react-bootstrap'
 import './style.nullword.css'
+
+const NullWordInput = (props) => {
+  let wordValue;
+  return (
+    <React.Fragment>
+      <input type='text'
+        type="text"
+        placeholder="Add a word to block"
+        ref={name=>wordValue=name}/>
+      <Button onClick={() => {
+        props.addWord(wordValue.value)
+      }}>
+        Add
+      </Button>
+    </React.Fragment>
+
+  )
+}
+
 class WordInputForm extends React.Component {
     constructor(props, context) {
       super(props, context);
@@ -33,7 +52,7 @@ class WordInputForm extends React.Component {
           >
             <HelpBlock>Search for something (you can use AND/OR/NOT) </HelpBlock>
           
-            <FormControl
+            <input
               type="text"
               value={this.state.value}
               placeholder="Enter text"
@@ -61,9 +80,9 @@ export const NullWordBar = (props)=>{
           Examples with these words won't appear
       </Panel.Heading>
       <Panel.Body>
-        {/* <Col md={2}>
-            <WordInputForm onSubmit={props.addWord} />
-        </Col> */}
+        <NullWordInput 
+        addWord={props.addWord}
+        />
         <Row className="null-word-container"> 
           {props.words.map(word=>(
                   <NullWord word={word} removeWord={props.removeWord} />

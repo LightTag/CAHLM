@@ -15,7 +15,6 @@ export class ESManager extends React.Component {
       hits: [],
       nullWords: [],
       terms: [],
-      labeler:"tal"
     };
     this.client = new elasticsearch.Client({host: this.props.host});
 
